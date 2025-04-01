@@ -3,7 +3,6 @@ package com.example.corrutinas
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,11 +18,15 @@ import androidx.compose.ui.Modifier
 import com.example.corrutinas.ui.theme.CorrutinasTheme
 import com.example.corrutinas.view.model.ItemsViewModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             CorrutinasTheme {
                 Surface(
@@ -45,7 +48,7 @@ fun ItemsView(viewModel: ItemsViewModel) {
         viewModel.fetchData()
     }
     Column {
-        if(viewModel.isLoading) {
+        if (viewModel.isLoading) {
             CircularProgressIndicator()
         } else {
             LazyColumn {
@@ -54,5 +57,20 @@ fun ItemsView(viewModel: ItemsViewModel) {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ButtonColor() {
+    var color by remember { mutableStateOf(false) }
+    Button(
+        onClick = { color = !color },
+        colors = ButtonDefaults.buttonColors(
+            containerColor =
+            if (color) MaterialTheme.colorScheme.primary
+            else MaterialTheme.colorScheme.secondary,
+        )
+    ) {
+        Text(text = "Cambiar Color")
     }
 }
